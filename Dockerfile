@@ -1,7 +1,20 @@
-FROM jupyter/scipy-notebook
+# Use the official Python image as a base image
+FROM python:3.9-slim
 
-RUN mkdir test
-COPY test/batch.py test/
-COPY test/svc_model.model test/
+# Set the working directory in the container
+WORKDIR /app
 
-RUN python3 test/batch.py
+# Copy the current directory contents into the container at /app
+COPY . /app
+
+# Install dependencies
+RUN pip install --no-cache-dir -r requirements.txt
+
+# Expose port 5000 to the outside world
+EXPOSE 5000
+
+# Define environment variable
+ENV NAME World
+
+# Command to run the Flask application
+CMD ["python", "app.py"]
