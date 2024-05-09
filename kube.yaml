@@ -1,42 +1,37 @@
 apiVersion: v1
 kind: Namespace
 metadata:
-  name: test-ml-app
+  name: streamlit-app
 ---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  labels:
-    app: test-ml-score-api
-  name: test-ml-score-api
-  namespace: test-ml-app
+  name: streamlit-app
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: test-ml-score-api
+      app: streamlit-app
   template:
     metadata:
       labels:
-        app: test-ml-score-api
+        app: streamlit-app
     spec:
       containers:
-      - image: loup21991/flask-api:latest
-        name: test-ml-score-api
+      - name: streamlit-app
+        image: loup21991/streamlit-app:latest
         ports:
-        - containerPort: 5000
+        - containerPort: 8501
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: test-ml-score-lb
-  labels:
-    app: test-ml-score-api
-  namespace: test-ml-app
+  name: streamlit-service
 spec:
-  type: LoadBalancer
-  ports:
-  - port: 5000
-    targetPort: 5000
   selector:
-    app: test-ml-score-api
+    app: streamlit-app
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 8501
+  type: LoadBalancer

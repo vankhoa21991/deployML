@@ -1,1 +1,3 @@
-Flask
+altair
+pandas
+streamlit
